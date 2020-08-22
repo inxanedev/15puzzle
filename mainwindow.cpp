@@ -56,57 +56,21 @@ XY findNum(int num) {
     }
     return result;
 }
-void gridSwap(int y, int x, XY coords) {
-    if (grid[y][x] == 16) {
-        std::swap(grid[y][x], grid[coords.y][coords.x]);
-    }
-}
-
 void MainWindow::performSwap() {
     QPushButton *btn = (QPushButton *)sender();
     int num = btn->text().toInt();
     XY numCoords = findNum(num);
-
-    // Middle 2x2
-    if (numCoords.y == 1 || numCoords.y == 2) {
-        if (numCoords.x == 1 || numCoords.x == 2) {
-            gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-            gridSwap(numCoords.y - 1, numCoords.x, numCoords);
-            gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-            gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-        }
-    }
-    // Corners
-    if (numCoords.y == 0 && numCoords.x == 0) {
-        gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-        gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-    } else if (numCoords.y == 0 && numCoords.x == 3) {
-        gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-        gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-    } else if (numCoords.y == 3 && numCoords.x == 0) {
-        gridSwap(numCoords.y - 1, numCoords.x, numCoords);
-        gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-    } else if (numCoords.y == 3 && numCoords.x == 3) {
-        gridSwap(numCoords.y - 1, numCoords.x, numCoords);
-        gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-    }
-    // Edges
-    if ((numCoords.x == 1 || numCoords.x == 2) && numCoords.y == 0) {
-        gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-        gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-        gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-    } else if ((numCoords.y == 1 || numCoords.y == 2) && numCoords.x == 0) {
-        gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-        gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-        gridSwap(numCoords.y - 1, numCoords.x, numCoords);
-    } else if ((numCoords.y == 1 || numCoords.y == 2) && numCoords.x == 3) {
-        gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-        gridSwap(numCoords.y + 1, numCoords.x, numCoords);
-        gridSwap(numCoords.y - 1, numCoords.x, numCoords);
-    } else if ((numCoords.x == 1 || numCoords.x == 2) && numCoords.y == 3) {
-        gridSwap(numCoords.y, numCoords.x + 1, numCoords);
-        gridSwap(numCoords.y, numCoords.x - 1, numCoords);
-        gridSwap(numCoords.y - 1, numCoords.x, numCoords);
+    int x = numCoords.x;
+    int y = numCoords.y;
+    // Credits to u/jarfil for fixing my idiocy
+    if ((x > 0) && (grid[y][x - 1] == 16)) {
+        std::swap(grid[y][x], grid[y][x - 1]);
+    } else if ((x < 3) && (grid[y][x + 1] == 16)) {
+        std::swap(grid[y][x], grid[y][x + 1]);
+    } else if ((y > 0) && (grid[y - 1][x] == 16)) {
+        std::swap(grid[y][x], grid[y - 1][x]);
+    } else if ((y < 3) && (grid[y + 1][x] == 16)) {
+        std::swap(grid[y][x], grid[y + 1][x]);
     }
     // Change button positions
     XY temp;
